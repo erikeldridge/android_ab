@@ -1,9 +1,12 @@
-package com.example.test;
+package com.example.android_ab;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -12,10 +15,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.v("MainActivity", "onCreate");
         
-        FetchItemsAsyncTask task = new FetchItemsAsyncTask(this);
-        task.execute(new String[] {"http://item-network.localhost.com:9393/api/1/items"});
+        RelativeLayout layout = new RelativeLayout(this);
+        TextView text = new TextView(this);
+        Resources resources = this.getResources();
+        text.setText(resources.getString(R.string.default_content));
+        layout.addView(text);
         
-        setContentView(R.layout.activity_main);
+        setContentView(layout);
     }
 
     @Override

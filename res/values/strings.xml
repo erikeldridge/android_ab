@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Test</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">android_ab</string>
+    <string name="default_content">default content</string>
+    <string name="control_content">control content</string>
+    <string name="fancy_content">fancy content</string>
     <string name="menu_settings">Settings</string>
 
 </resources>

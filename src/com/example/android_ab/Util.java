@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.android_ab;
 
 import java.io.BufferedReader;
 import java.io.IOException;
