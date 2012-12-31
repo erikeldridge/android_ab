@@ -18,7 +18,16 @@ public class MainActivity extends Activity {
         RelativeLayout layout = new RelativeLayout(this);
         TextView text = new TextView(this);
         Resources resources = this.getResources();
-        text.setText(resources.getString(R.string.default_content));
+        
+        String bucket = DDG.getBucket("experiment_1");
+        if("control" == bucket){
+        	text.setText(resources.getString(R.string.control_content));
+        }else if("fancy" == bucket){
+        	text.setText(resources.getString(R.string.fancy_content));
+        }else{
+        	text.setText(resources.getString(R.string.default_content));
+        }
+        
         layout.addView(text);
         
         setContentView(layout);
