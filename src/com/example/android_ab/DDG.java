@@ -1,11 +1,23 @@
 package com.example.android_ab;
 
+import android.content.Context;
+
 import java.util.HashMap;
 
 public class DDG {
-	static String getBucket(String experiment_key){
-		HashMap<String, String> experiments = new HashMap<String, String>();
-		experiments.put("experiment_1", "fancy");
-		return experiments.get(experiment_key);
+    DBHelper mDBHelper;
+
+    DDG(Context context){
+        this.mDBHelper = new DBHelper(context);
+    }
+
+	String getBucket(String experiment_key){
+		Experiment experiment = this.mDBHelper.getExperiment(experiment_key);
+        String bucketName = null;
+        if(experiment != null){
+            // fire impression
+            bucketName = experiment.mBucketName;
+        }
+        return bucketName;
 	}
 }

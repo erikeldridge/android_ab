@@ -1,5 +1,6 @@
 package com.example.android_ab;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.res.Resources;
@@ -20,9 +21,9 @@ public class MainActivity extends Activity {
         Resources resources = this.getResources();
         
         String bucket = DDG.getBucket("experiment_1");
-        if("control" == bucket){
+        if("control".equals(bucket)){
         	text.setText(resources.getString(R.string.control_content));
-        }else if("fancy" == bucket){
+        }else if("fancy".equals(bucket)){
         	text.setText(resources.getString(R.string.fancy_content));
         }else{
         	text.setText(resources.getString(R.string.default_content));
@@ -31,6 +32,20 @@ public class MainActivity extends Activity {
         layout.addView(text);
         
         setContentView(layout);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        Intent intent = new Intent(this, ExperimentConfigService.class);
+        startService(intent);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Intent intent = new Intent(this, ExperimentConfigService.class);
+        startService(intent);
     }
 
     @Override

@@ -1,0 +1,13 @@
+.classpath
+.idea
+.metadata
+.project
+.settings
+.DS_Store
+*.iml
+bin/
+gen/
+local.properties
+log/
+out/
+target/
