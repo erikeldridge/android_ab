@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
         TextView text = new TextView(this);
         Resources resources = this.getResources();
         
-        String bucket = DDG.getBucket("experiment_1");
+        String bucket = new ABUtil(this).getBucket("experiment_1");
         if("control".equals(bucket)){
         	text.setText(resources.getString(R.string.control_content));
         }else if("fancy".equals(bucket)){

@@ -12,10 +12,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public final class DBHelper extends SQLiteOpenHelper {
-    public static final String TAG = "DBHelper";
-    public static final String DATABASE_FILE_NAME = "android_ab.db";
-    public static final int DATABASE_VERSION = 1;
+final class DBHelper extends SQLiteOpenHelper {
+    private static final String TAG = "DBHelper";
+    private static final String DATABASE_FILE_NAME = "android_ab.db";
+    private static final int DATABASE_VERSION = 1;
 
     DBHelper(Context context) {
         super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
@@ -41,13 +41,13 @@ public final class DBHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public static final String TABLE_NAME = "experiments";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_EXPERIMENT_KEY = "experiment_key";
-    public static final String COLUMN_BUCKET_NAME = "bucket_name";
-    public static final String COLUMN_VERSION = "version";
-    public static final String COLUMN_EXPIRATION_DATE = "expiration_date";
-    public static final String SQL_CREATE_EXPERIMENTS_TABLE = String.format(
+    private static final String TABLE_NAME = "experiments";
+    private static final String COLUMN_ID = "_id";
+    private static final String COLUMN_EXPERIMENT_KEY = "experiment_key";
+    private static final String COLUMN_BUCKET_NAME = "bucket_name";
+    private static final String COLUMN_VERSION = "version";
+    private static final String COLUMN_EXPIRATION_DATE = "expiration_date";
+    private static final String SQL_CREATE_EXPERIMENTS_TABLE = String.format(
             "CREATE TABLE %s ("
                     +"%s INTEGER PRIMARY KEY AUTOINCREMENT,"
                     +"%s TEXT UNIQUE NOT NULL"
@@ -56,16 +56,16 @@ public final class DBHelper extends SQLiteOpenHelper {
                     +"%s TEXT);",
             TABLE_NAME, COLUMN_ID, COLUMN_EXPERIMENT_KEY,
             COLUMN_BUCKET_NAME, COLUMN_VERSION, COLUMN_EXPIRATION_DATE);
-    public static final String SQL_DROP_EXPERIMENTS_TABLE = String.format(
+    private static final String SQL_DROP_EXPERIMENTS_TABLE = String.format(
             "DROP TABLE IF EXISTS %s;", TABLE_NAME);
-    public static final String SQL_DELETE_ALL_EXPERIMENTS = String.format(
+    private static final String SQL_DELETE_ALL_EXPERIMENTS = String.format(
             "DELETE FROM %s;", TABLE_NAME);
-    public static final String SQL_INSERT_EXPERIMENTS = String.format(
+    private static final String SQL_INSERT_EXPERIMENTS = String.format(
             "INSERT INTO %s (%s %s %s %s) VALUES (%%s %%s %%s %%s);",
             TABLE_NAME, COLUMN_EXPERIMENT_KEY,
             COLUMN_BUCKET_NAME, COLUMN_VERSION, COLUMN_EXPIRATION_DATE);
-    public static final String SQL_BEGIN_COMMIT = "BEGIN; %s COMMIT;";
-    public static final String SQL_SELECT_EXPERIMENT = String.format(
+    private static final String SQL_BEGIN_COMMIT = "BEGIN; %s COMMIT;";
+    private static final String SQL_SELECT_EXPERIMENT = String.format(
             "SELECT * FROM %s WHERE %s = '%%s' AND %s < date('now');",
             TABLE_NAME, COLUMN_EXPERIMENT_KEY, COLUMN_EXPIRATION_DATE);
 

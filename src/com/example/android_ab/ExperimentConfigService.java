@@ -15,8 +15,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ExperimentConfigService extends IntentService {
-    public static final String TAG = "ExperimentConfigService";
-    public static final String SERVICE_URL = "http://damp-taiga-5766.localhost.com:5000";
+    private static final String TAG = "ExperimentConfigService";
+    private static final String SERVICE_URL = "http://damp-taiga-5766.localhost.com:5000";
 
     public ExperimentConfigService() {
         super("ExperimentConfigService");
@@ -42,12 +42,12 @@ public class ExperimentConfigService extends IntentService {
         return json;
     }
 
-    public static String readStream(InputStream in){
+    private static String readStream(InputStream in){
         Log.v(TAG, "readStream");
         BufferedReader reader = null;
         String json = "";
         try {
-            String line = "";
+            String line;
             reader = new BufferedReader(new InputStreamReader(in));
             while((line = reader.readLine()) != null){
                 json += line;
@@ -66,7 +66,7 @@ public class ExperimentConfigService extends IntentService {
         return json;
     }
 
-    public static JSONArray parseJson(String json){
+    private static JSONArray parseJson(String json){
         Log.v(TAG, "parseJson");
         JSONArray data = null;
 
@@ -87,7 +87,7 @@ public class ExperimentConfigService extends IntentService {
         return data;
     }
 
-    public void saveExperiments(JSONArray experiments){
+    private void saveExperiments(JSONArray experiments){
         DBHelper helper = new DBHelper(this);
         helper.removeAllExperiments();
         helper.addExperiments(experiments);

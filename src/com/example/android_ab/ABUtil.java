@@ -2,20 +2,20 @@ package com.example.android_ab;
 
 import android.content.Context;
 
-import java.util.HashMap;
+class ABUtil {
+    private final DBHelper mDBHelper;
 
-public class DDG {
-    DBHelper mDBHelper;
-
-    DDG(Context context){
+    ABUtil(Context context){
         this.mDBHelper = new DBHelper(context);
     }
+
+    void log(Experiment experiment){}
 
 	String getBucket(String experiment_key){
 		Experiment experiment = this.mDBHelper.getExperiment(experiment_key);
         String bucketName = null;
         if(experiment != null){
-            // fire impression
+            log(experiment);
             bucketName = experiment.mBucketName;
         }
         return bucketName;
