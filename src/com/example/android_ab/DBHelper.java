@@ -1,9 +1,7 @@
 package com.example.android_ab;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
@@ -49,10 +47,10 @@ final class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_EXPIRATION_DATE = "expiration_date";
     private static final String SQL_CREATE_EXPERIMENTS_TABLE = String.format(
             "CREATE TABLE %s ("
-                    +"%s INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    +"%s TEXT UNIQUE NOT NULL"
-                    +"%s TEXT"
-                    +"%s TEXT"
+                    +"%s INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    +"%s TEXT UNIQUE NOT NULL, "
+                    +"%s TEXT, "
+                    +"%s TEXT, "
                     +"%s TEXT);",
             TABLE_NAME, COLUMN_ID, COLUMN_EXPERIMENT_KEY,
             COLUMN_BUCKET_NAME, COLUMN_VERSION, COLUMN_EXPIRATION_DATE);
@@ -61,12 +59,11 @@ final class DBHelper extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ALL_EXPERIMENTS = String.format(
             "DELETE FROM %s;", TABLE_NAME);
     private static final String SQL_INSERT_EXPERIMENTS = String.format(
-            "INSERT INTO %s (%s %s %s %s) VALUES (%%s %%s %%s %%s);",
+            "INSERT INTO %s (%s, %s, %s, %s) VALUES ('%%s', '%%s', '%%s', '%%s');",
             TABLE_NAME, COLUMN_EXPERIMENT_KEY,
             COLUMN_BUCKET_NAME, COLUMN_VERSION, COLUMN_EXPIRATION_DATE);
-    private static final String SQL_BEGIN_COMMIT = "BEGIN; %s COMMIT;";
     private static final String SQL_SELECT_EXPERIMENT = String.format(
-            "SELECT * FROM %s WHERE %s = '%%s' AND %s < date('now');",
+            "SELECT * FROM %s WHERE %s = '%%s' AND %s >= date('now');",
             TABLE_NAME, COLUMN_EXPERIMENT_KEY, COLUMN_EXPIRATION_DATE);
 
     public synchronized void removeAllExperiments() {
@@ -74,7 +71,7 @@ final class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DELETE_ALL_EXPERIMENTS);
     }
 
-    public synchronized void addExperiments(JSONArray experiments) throws SQLException {
+    public synchronized void addExperiments(JSONArray experiments) {
         JSONObject experiment;
         String[] queries = new String[experiments.length()];
         for(int i = 0; i < experiments.length(); i++){
@@ -87,18 +84,16 @@ final class DBHelper extends SQLiteOpenHelper {
                         experiment.getString("expiration_date"));
             } catch (JSONException e) {
                 e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         }
         final SQLiteDatabase db = getWritableDatabase();
-        String query = String.format(SQL_BEGIN_COMMIT, TextUtils.join(",", queries));
+        String query = TextUtils.join(";", queries);
         db.execSQL(query);
     }
 
     public synchronized Experiment getExperiment(String experimentKey) {
         final SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery(SQL_SELECT_EXPERIMENT, new String[]{});
+        Cursor cursor = db.rawQuery(String.format(SQL_SELECT_EXPERIMENT, experimentKey), new String[]{});
         Experiment experiment = null;
         cursor.moveToFirst();
         if(cursor.getCount() > 0){
