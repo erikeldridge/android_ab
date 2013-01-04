@@ -35,13 +35,6 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onStart(){
-        super.onStart();
-        Intent intent = new Intent(this, ExperimentConfigService.class);
-        startService(intent);
-    }
-
-    @Override
     protected void onResume(){
         super.onResume();
         Intent intent = new Intent(this, ExperimentConfigService.class);
