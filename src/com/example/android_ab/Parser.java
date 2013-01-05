@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class Parser {
+class Parser {
     private static final String KEY_EXPERIMENT_KEY = "experiment_key";
     private static final String KEY_BUCKET_NAME = "bucket_name";
     private static final String KEY_VERSION = "version";
@@ -32,7 +32,7 @@ public class Parser {
         return experiments;
     }
 
-    public static Experiment parseExperiment(JsonParser parser) throws IOException {
+    private static Experiment parseExperiment(JsonParser parser) throws IOException {
         JsonToken token = parser.nextToken();
         String name;
         Experiment experiment = new Experiment();

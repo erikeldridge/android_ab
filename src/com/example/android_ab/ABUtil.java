@@ -9,7 +9,7 @@ class ABUtil {
         this.mDBHelper = new DBHelper(context);
     }
 
-    void log(Experiment experiment){}
+    private void log(Experiment experiment){} // placeholder for remote logger
 
 	String getBucket(String experiment_key){
 		Experiment experiment = this.mDBHelper.getExperiment(experiment_key);

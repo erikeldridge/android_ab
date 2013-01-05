@@ -39,9 +39,11 @@ public class ExperimentConfigService extends IntentService {
     }
 
     private InputStream fetchExperimentConfig() throws IOException {
-        URL url = new URL(SERVICE_URL);
+        URL url;
         if(BuildConfig.DEBUG){
             url = new URL(SERVICE_URL+":5000");
+        }else{
+            url = new URL(SERVICE_URL);
         }
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         return con.getInputStream();
