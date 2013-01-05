@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 final class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DBHelper";
     private static final String DATABASE_FILE_NAME = "android_ab.db";
@@ -50,7 +52,7 @@ final class DBHelper extends SQLiteOpenHelper {
                     +"%s INTEGER PRIMARY KEY AUTOINCREMENT, "
                     +"%s TEXT UNIQUE NOT NULL, "
                     +"%s TEXT, "
-                    +"%s TEXT, "
+                    +"%s INTEGER, "
                     +"%s TEXT);",
             TABLE_NAME, COLUMN_ID, COLUMN_EXPERIMENT_KEY,
             COLUMN_BUCKET_NAME, COLUMN_VERSION, COLUMN_EXPIRATION_DATE);
@@ -59,7 +61,7 @@ final class DBHelper extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ALL_EXPERIMENTS = String.format(
             "DELETE FROM %s;", TABLE_NAME);
     private static final String SQL_INSERT_EXPERIMENTS = String.format(
-            "INSERT INTO %s (%s, %s, %s, %s) VALUES ('%%s', '%%s', '%%s', '%%s');",
+            "INSERT INTO %s (%s, %s, %s, %s) VALUES ('%%s', '%%s', '%%d', '%%s');",
             TABLE_NAME, COLUMN_EXPERIMENT_KEY,
             COLUMN_BUCKET_NAME, COLUMN_VERSION, COLUMN_EXPIRATION_DATE);
     private static final String SQL_SELECT_EXPERIMENT = String.format(
@@ -71,20 +73,16 @@ final class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DELETE_ALL_EXPERIMENTS);
     }
 
-    public synchronized void addExperiments(JSONArray experiments) {
-        JSONObject experiment;
-        String[] queries = new String[experiments.length()];
-        for(int i = 0; i < experiments.length(); i++){
-            try {
-                experiment = experiments.getJSONObject(i);
-                queries[i] = String.format(SQL_INSERT_EXPERIMENTS,
-                        experiment.getString("experiment_key"),
-                        experiment.getString("bucket_name"),
-                        experiment.getString("version"),
-                        experiment.getString("expiration_date"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+    public synchronized void addExperiments(ArrayList<Experiment> experiments) {
+        String[] queries = new String[experiments.size()];
+        Experiment experiment;
+        for(int i = 0; i < experiments.size(); i++){
+            experiment = experiments.get(i);
+            queries[i] = String.format(SQL_INSERT_EXPERIMENTS,
+                    experiment.mExperimentKey,
+                    experiment.mBucketName,
+                    experiment.mVersion,
+                    experiment.mExpirationDate);
         }
         final SQLiteDatabase db = getWritableDatabase();
         String query = TextUtils.join(";", queries);
@@ -100,7 +98,7 @@ final class DBHelper extends SQLiteOpenHelper {
             experiment = new Experiment();
             experiment.mExperimentKey = cursor.getString(cursor.getColumnIndex(COLUMN_EXPERIMENT_KEY));
             experiment.mBucketName = cursor.getString(cursor.getColumnIndex(COLUMN_BUCKET_NAME));
-            experiment.mVersion = cursor.getString(cursor.getColumnIndex(COLUMN_VERSION));
+            experiment.mVersion = cursor.getInt(cursor.getColumnIndex(COLUMN_VERSION));
             experiment.mExpirationDate = cursor.getString(cursor.getColumnIndex(COLUMN_EXPIRATION_DATE));
         }
         return experiment;
