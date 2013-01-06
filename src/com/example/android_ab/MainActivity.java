@@ -19,8 +19,10 @@ public class MainActivity extends Activity {
         RelativeLayout layout = new RelativeLayout(this);
         TextView text = new TextView(this);
         Resources resources = this.getResources();
-        
-        String bucket = new ABUtil(this).getBucket("experiment_1");
+
+        ABUtil AB = new ABUtil(this);
+
+        String bucket = AB.getBucket("experiment_1");
         if("control".equals(bucket)){
         	text.setText(resources.getString(R.string.control_content));
         }else if("fancy".equals(bucket)){
